@@ -90,15 +90,15 @@
 
     theL1Eff->Draw("P");
 
-	TLegend* legendL1TauJet = new TLegend(0.55,0.18,0.92,0.38);
+	TLegend* legendL1TauJet = new TLegend(0.5,0.18,0.92,0.38);
 	legendL1TauJet->SetBorderSize(1);
-	legendL1TauJet->SetTextSize(0.03);
+	legendL1TauJet->SetTextSize(0.028);
 	legendL1TauJet->SetLineColor(1);
 	legendL1TauJet->SetLineStyle(1);
 	legendL1TauJet->SetLineWidth(1);
 	legendL1TauJet->SetFillColor(0);
-	legendL1TauJet->AddEntry(theL1TauEff,	"L1 Tau","pel");
-	legendL1TauJet->AddEntry(theL1JetEff,	"L1 Central Jet","pel");
+	legendL1TauJet->AddEntry(theL1TauEff,	"L1 Tau, p_{T}>44 GeV","pel");
+	legendL1TauJet->AddEntry(theL1JetEff,	"L1 Central Jet, p_{T}>64 GeV","pel");
 	legendL1TauJet->AddEntry(theL1Eff,		"L1 Tau or Central Jet","pel");
 	legendL1TauJet->Draw();
 
