@@ -224,6 +224,7 @@ TF1* crystalFit(TGraphAsymmErrors* theEff, double minEt = 15.) {
 
 
 	TF1* fit = new TF1("crystalBallFit",crystalballplot,minEt,200.,5);
+	std::cout << "WARNING: The parametrization of the crystal ball function seems not to agree with error function." << std::endl;
 	fit->SetParameters(prefit->GetParameter(0),prefit->GetParameter(2),1.7,1.4,prefit->GetParameter(1));
 
 ////	fit->SetParameters(prefit->GetParameter(0),prefit->GetParameter(2),1.7,tailfit->GetParameter(2),prefit->GetParameter(1));

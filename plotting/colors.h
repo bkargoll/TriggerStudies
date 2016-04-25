@@ -18,5 +18,15 @@ int col_rwth_green		= TColor::GetColor(87,171,39);
 int col_rwth_maygreen	= TColor::GetColor(189,205,0);
 int col_rwth_orange		= TColor::GetColor(246,168,0);
 int col_rwth_red		= TColor::GetColor(204,7,30);
+int col_rwth_bordeaux	= TColor::GetColor(161,16,53);
 int col_rwth_violett	= TColor::GetColor(97,33,88);
 int col_rwth_purple		= TColor::GetColor(122,111,172);
+
+// to be used in script
+int l1TauColor = col_rwth_darkblue;
+int l1JetColor = col_rwth_lightblue;
+
+int l1Color		= col_rwth_petrol;
+int l2Color		= col_rwth_red;
+int l2p5Color	= col_rwth_bordeaux;
+int l3Color		= col_rwth_green;
