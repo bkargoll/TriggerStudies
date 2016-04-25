@@ -22,7 +22,6 @@
   tdrGrid(true,tdrStyle);
   //gStyle->SetOptFit(0);
   gStyle->SetTitleXOffset(0.95);
-  tdrStyle->SetHistLineWidth(2);
 
   // rebin x-axis for eff(eta) plots
   int rebin_eff = 2;
@@ -346,10 +345,9 @@
 	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
 	canvasL1_HLTeta->SaveAs(savePath + "/L1_HLTTauEta.pdf");
 
-
-	cout << " ***************** Plot: L1 eta resolution ****************** " << endl;
-	TCanvas* canvasL1etaResol = new TCanvas("canvasL1etaResol","canvasL1etaResol");
-	canvasL1etaResol->cd();
+	cout << " ***************** Plot: eta resolutions ****************** " << endl;
+	TCanvas* canvasetaResol = new TCanvas("canvasL1etaResol","canvasL1etaResol");
+	canvasetaResol->cd();
 
 	TH1F* etaResolL1 = (TH1F*)l1File->Get("resEtaL1_Total");
 	etaResolL1->Sumw2();
@@ -363,13 +361,57 @@
     	if (etaResolL1->GetBinContent(i) == 0.)
     		etaResolL1->SetBinContent(i,0.000001);
     }
-    etaResolL1->Draw("hist");
-    latex.DrawLatex(xLatex,yLatex,latexText_fullL);
-    canvasL1etaResol->SaveAs(savePath + "/L1TauEtaResolution.pdf");
+    etaResolL1->SetLineColor(l1Color);
+    etaResolL1->SetLineWidth(2);
+    etaResolL1->SetLineStyle(9);
 
-	cout << " ***************** Plot: L1 pT resolution ****************** " << endl;
-	TCanvas* canvasL1ptResol = new TCanvas("canvasL1ptResol","canvasL1ptResol");
-	canvasL1ptResol->cd();
+	TH1F* etaResolL2 = (TH1F*)hltFile->Get("resEtaL2_Total");
+	etaResolL2->Sumw2();
+	etaResolL2->Rebin(4);
+	etaResolL2->Scale(1./etaResolL2->Integral());
+    for (unsigned int i = 1; i<=etaResolL2->GetNbinsX(); i++){
+    	if (etaResolL2->GetBinContent(i) == 0.)
+    		etaResolL2->SetBinContent(i,0.000001);
+    }
+    etaResolL2->SetLineColor(l2Color);
+    etaResolL2->SetLineWidth(2);
+    etaResolL2->SetLineStyle(2);
+
+	TH1F* etaResolL3 = (TH1F*)hltFile->Get("resEtaL3_Total");
+	etaResolL3->Sumw2();
+	etaResolL3->Rebin(4);
+	etaResolL3->Scale(1./etaResolL3->Integral());
+    for (unsigned int i = 1; i<=etaResolL3->GetNbinsX(); i++){
+    	if (etaResolL3->GetBinContent(i) == 0.)
+    		etaResolL3->SetBinContent(i,0.000001);
+    }
+    etaResolL3->SetLineColor(l3Color);
+    etaResolL3->SetLineWidth(2);
+    etaResolL3->SetLineStyle(1);
+
+    etaResolL1->GetYaxis()->SetRangeUser(0., 1.1 * etaResolL3->GetMaximum());
+
+    etaResolL1->Draw("hist");
+    etaResolL2->Draw("hist same");
+    etaResolL3->Draw("hist same");
+
+	TLegend* legendEtaResol = new TLegend(0.65,0.68,0.96,0.88);
+	legendEtaResol->SetBorderSize(1);
+	legendEtaResol->SetTextSize(0.028);
+	legendEtaResol->SetBorderSize(0);
+	legendEtaResol->SetFillColor(0);
+	legendEtaResol->AddEntry(etaResolL1,	"L1 objects","l");
+	legendEtaResol->AddEntry(etaResolL2,	"L2 objects","l");
+	legendEtaResol->AddEntry(etaResolL3,	"L3 objects","l");
+	legendEtaResol->Draw();
+
+    latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
+    canvasetaResol->SetGrid(0,0);
+    canvasetaResol->SaveAs(savePath + "/EtaResolutions.pdf");
+
+	cout << " ***************** Plot: pT resolutions ****************** " << endl;
+	TCanvas* canvasptResol = new TCanvas("canvasptResol","canvasptResol");
+	canvasptResol->cd();
 
 	TH1F* ptResolL1 = (TH1F*)l1File->Get("resPtL1_Total");
 	ptResolL1->Sumw2();
@@ -377,83 +419,47 @@
 	ptResolL1->Scale(1./ptResolL1->Integral());
     ptResolL1->GetYaxis()->SetTitle(t_yaxis_dens);
     ptResolL1->GetXaxis()->SetTitle(t_xaxis_ptresol);
-    ptResolL1->GetXaxis()->SetRangeUser(-25.0,85.0);
+    ptResolL1->GetXaxis()->SetRangeUser(-25.0,65.0);
     ptResolL1->GetYaxis()->SetTitleOffset(1.25);
-    ptResolL1->Draw("hist");
-    latex.DrawLatex(xLatex,yLatex,latexText_fullL);
-    canvasL1ptResol->SaveAs(savePath + "/L1TauPtResolution.pdf");
-
-   	cout << " ***************** Plot: L2 eta resolution ****************** " << endl;
-	TCanvas* canvasL2etaResol = new TCanvas("canvasL2etaResol","canvasL2etaResol");
-	canvasL2etaResol->cd();
-
-	TH1F* etaResolL2 = (TH1F*)hltFile->Get("resEtaL2_Total");
-	etaResolL2->Sumw2();
-	etaResolL2->Rebin(4);
-	etaResolL2->Scale(1./etaResolL2->Integral());
-    etaResolL2->GetYaxis()->SetTitle(t_yaxis_dens);
-    etaResolL2->GetXaxis()->SetTitle(t_xaxis_etaresol);
-    etaResolL2->GetXaxis()->SetRangeUser(-0.35,0.35);
-    etaResolL2->GetYaxis()->SetTitleOffset(1.25);
-    for (unsigned int i = 1; i<=etaResolL2->GetNbinsX(); i++){
-    	if (etaResolL2->GetBinContent(i) == 0.)
-    		etaResolL2->SetBinContent(i,0.000001);
-    }
-    etaResolL2->Draw("hist");
-    latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
-    canvasL2etaResol->SaveAs(savePath + "/L2TauEtaResolution.pdf");
-
-	cout << " ***************** Plot: L2 pT resolution ****************** " << endl;
-	TCanvas* canvasL2ptResol = new TCanvas("canvasL2ptResol","canvasL2ptResol");
-	canvasL2ptResol->cd();
+    ptResolL1->SetLineColor(l1Color);
+    ptResolL1->SetLineStyle(9);
+    ptResolL1->SetLineWidth(2);
 
 	TH1F* ptResolL2 = (TH1F*)hltFile->Get("resPtL2_Total");
 	ptResolL2->Sumw2();
 	ptResolL2->Rebin(8);
 	ptResolL2->Scale(1./ptResolL2->Integral());
-    ptResolL2->GetYaxis()->SetTitle(t_yaxis_dens);
-    ptResolL2->GetXaxis()->SetTitle(t_xaxis_ptresol);
-    ptResolL2->GetXaxis()->SetRangeUser(-25.0,85.0);
-    ptResolL2->GetYaxis()->SetTitleOffset(1.25);
-    ptResolL2->Draw("hist");
-    latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
-    canvasL2ptResol->SaveAs(savePath + "/L2TauPtResolution.pdf");
-
-   	cout << " ***************** Plot: L3 eta resolution ****************** " << endl;
-	TCanvas* canvasL3etaResol = new TCanvas("canvasL3etaResol","canvasL3etaResol");
-	canvasL3etaResol->cd();
-
-	TH1F* etaResolL3 = (TH1F*)hltFile->Get("resEtaL3_Total");
-	etaResolL3->Sumw2();
-	etaResolL3->Rebin(4);
-	etaResolL3->Scale(1./etaResolL3->Integral());
-    etaResolL3->GetYaxis()->SetTitle(t_yaxis_dens);
-    etaResolL3->GetXaxis()->SetTitle(t_xaxis_etaresol);
-    etaResolL3->GetXaxis()->SetRangeUser(-0.35,0.35);
-    etaResolL3->GetYaxis()->SetTitleOffset(1.25);
-    for (unsigned int i = 1; i<=etaResolL3->GetNbinsX(); i++){
-    	if (etaResolL3->GetBinContent(i) == 0.)
-    		etaResolL3->SetBinContent(i,0.000001);
-    }
-    etaResolL3->Draw("hist");
-    latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
-    canvasL3etaResol->SaveAs(savePath + "/L3TauEtaResolution.pdf");
-
-	cout << " ***************** Plot: L3 pT resolution ****************** " << endl;
-	TCanvas* canvasL3ptResol = new TCanvas("canvasL3ptResol","canvasL3ptResol");
-	canvasL3ptResol->cd();
+	ptResolL2->SetLineColor(l2Color);
+	ptResolL2->SetLineStyle(2);
+	ptResolL2->SetLineWidth(2);
 
 	TH1F* ptResolL3 = (TH1F*)hltFile->Get("resPtL3_Total");
 	ptResolL3->Sumw2();
 	ptResolL3->Rebin(8);
 	ptResolL3->Scale(1./ptResolL3->Integral());
-    ptResolL3->GetYaxis()->SetTitle(t_yaxis_dens);
-    ptResolL3->GetXaxis()->SetTitle(t_xaxis_ptresol);
-    ptResolL3->GetXaxis()->SetRangeUser(-25.0,85.0);
-    ptResolL3->GetYaxis()->SetTitleOffset(1.25);
-    ptResolL3->Draw("hist");
+	ptResolL3->SetLineColor(l3Color);
+	ptResolL3->SetLineStyle(1);
+	ptResolL3->SetLineWidth(2);
+
+    ptResolL1->GetYaxis()->SetRangeUser(0., 1.1 * ptResolL3->GetMaximum());
+
+    ptResolL1->Draw("hist");
+    ptResolL2->Draw("hist same");
+    ptResolL3->Draw("hist same");
+
+	TLegend* legendPtResol = new TLegend(0.65,0.68,0.96,0.88);
+	legendPtResol->SetBorderSize(1);
+	legendPtResol->SetTextSize(0.028);
+	legendPtResol->SetBorderSize(0);
+	legendPtResol->SetFillColor(0);
+	legendPtResol->AddEntry(ptResolL1,	"L1 objects","l");
+	legendPtResol->AddEntry(ptResolL2,	"L2 objects","l");
+	legendPtResol->AddEntry(ptResolL3,	"L3 objects","l");
+	legendPtResol->Draw();
+
     latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
-    canvasL3ptResol->SaveAs(savePath + "/L3TauPtResolution.pdf");
+    canvasptResol->SetGrid(0,0);
+    canvasptResol->SaveAs(savePath + "/PtResolutions.pdf");
 
 
     cout << " ***************** Plot: L1 Rate vs. threshold ****************** " << endl;
@@ -600,7 +606,7 @@
 	legend->AddEntry(l1TauRate,"Double Tau, |#eta|<2.17","pel");
 	legend->AddEntry(l1JetRate,"Double Jet, |#eta|<3.0","pel");
 	legend->Draw();
-    latexText = "#sqrt{s}=8 TeV, L= 5 #times 10^{33} cm^{-2}s^{-1}";
+	const char* latexText = "#sqrt{s}=8 TeV, L= 5 #times 10^{33} cm^{-2}s^{-1}";
 	latex.DrawLatex(xLatex-0.15,yLatex,latexText);
 	canvasL1rate->SaveAs(savePath + "/L1TauRate.pdf");
 	cout << "All done. Results can be found here:\n     " << savePath << endl;

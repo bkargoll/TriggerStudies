@@ -29,4 +29,4 @@ int l1JetColor = col_rwth_lightblue;
 int l1Color		= col_rwth_petrol;
 int l2Color		= col_rwth_red;
 int l2p5Color	= col_rwth_bordeaux;
-int l3Color		= col_rwth_green;
+int l3Color		= col_rwth_violett;
