@@ -23,8 +23,10 @@
   //gStyle->SetOptFit(0);
   gStyle->SetTitleXOffset(0.95);
 
-  // rebin x-axis for eff(eta) plots
-  int rebin_eff = 2;
+  // rebin x-axis for eff(eta) plots (must be devider of 50)
+  int rebin_eff = 5;
+  // low edge of y-axis for eff(eta) plots
+  double effEtaLow = 0.54;
 
   // time stamp for saving of files
   TDatime datetime = TDatime();
@@ -58,8 +60,8 @@
   TString t_yaxis_dens	= "Density";
 
     cout << " ***************** Plot: L1 eff. over pT ****************** " << endl;
-    TCanvas* canvasL1 = new TCanvas("canvasL1", "canvasL1");
-    canvasL1->cd();
+//    TCanvas* canvasL1 = new TCanvas("canvasL1", "canvasL1");
+//    canvasL1->cd();
 
     TH1F* denomPtL1 = (TH1F*)l1File->Get("denominator_Total");
     TH1F* numPtL1 = (TH1F*)l1File->Get("numeratorL1_Total");
@@ -68,9 +70,103 @@
     theL1Eff->GetXaxis()->SetTitle(t_xaxis_pt);
     theL1Eff->GetXaxis()->SetRangeUser(0.,205.);
     theL1Eff->GetYaxis()->SetRangeUser(0.,1.04);
-    theL1Eff->Draw("AP");
-    latex.DrawLatex(xLatex,yLatex,latexText_fullL);
-    canvasL1->SaveAs(savePath + "/L1TauPtEfficiency.pdf");
+
+//    theL1Eff->Draw("AP");
+//    latex.DrawLatex(xLatex,yLatex,latexText_fullL);
+//    canvasL1->SaveAs(savePath + "/L1TauPtEfficiency.pdf");
+
+    cout << " ***************** Plot: L2 eff. over pT ****************** " << endl;
+//    TCanvas* canvasL2 = new TCanvas("canvasL2","canvasL2");
+//    canvasL2->cd();
+
+    TH1F* denomPtL2 = (TH1F*)hltFile->Get("denominator_Total");
+    TH1F* numPtL2 = (TH1F*)hltFile->Get("numeratorL2_Total");
+    TGraphAsymmErrors* theL2Eff = new TGraphAsymmErrors(numPtL2, denomPtL2, "cl=0.683 b(1,1) mode");
+    theL2Eff->GetYaxis()->SetTitle(t_yaxis_eff);
+    theL2Eff->GetXaxis()->SetTitle(t_xaxis_pt);
+    theL2Eff->GetXaxis()->SetRangeUser(0.,205.);
+    theL2Eff->GetYaxis()->SetRangeUser(0,1.04);
+//    theL2Eff->Draw("AP");
+//    TF1* L2Fit = logFitTest(15,numPtL2,denomPtL2);
+//    L2Fit->Draw("same");
+//    theL2Eff->Draw("P");
+//    latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
+//    canvasL2->SaveAs(savePath + "/L2TauPt.pdf");
+
+	cout << " ***************** Plot: L2L2p5 eff. over pT ****************** " << endl;
+//	TCanvas* canvasL2L2p5 = new TCanvas("canvasL2L2p5","canvasL2L2p5");
+//	canvasL2L2p5->cd();
+
+	TH1F* denomPtL2L2p5 = (TH1F*)hltFile->Get("denominator_Total");
+	TH1F* numPtL2L2p5 = (TH1F*)hltFile->Get("numeratorL2L2p5_Total");
+	TGraphAsymmErrors* theL2L2p5Eff = new TGraphAsymmErrors(numPtL2L2p5, denomPtL2L2p5, "cl=0.683 b(1,1) mode");
+	theL2L2p5Eff->GetYaxis()->SetTitle(t_yaxis_eff);
+	theL2L2p5Eff->GetXaxis()->SetTitle(t_xaxis_pt);
+	theL2L2p5Eff->GetXaxis()->SetRangeUser(0.,205.);
+	theL2L2p5Eff->GetYaxis()->SetRangeUser(0,1.04);
+//	theL2L2p5Eff->Draw("AP");
+//	TF1* L2L2p5Fit = logFitTest(15,numPtL2L2p5,denomPtL2L2p5);
+//	L2L2p5Fit->Draw("same");
+//	theL2L2p5Eff->Draw("P");
+//	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
+//	canvasL2L2p5->SaveAs(savePath + "/L2L2p5TauPt.pdf");
+
+	cout << " ***************** Plot: L3 eff. over pT ****************** " << endl;
+//	TCanvas* canvasL3 = new TCanvas("canvasL3","canvasL3");
+//	canvasL3->cd();
+
+	TH1F* denomPtL3 = (TH1F*)hltFile->Get("denominator_Total");
+	TH1F* numPtL3 = (TH1F*)hltFile->Get("numeratorL3_Total");
+	TGraphAsymmErrors* theL3Eff = new TGraphAsymmErrors(numPtL3, denomPtL3, "cl=0.683 b(1,1) mode");
+	theL3Eff->GetYaxis()->SetTitle(t_yaxis_eff);
+	theL3Eff->GetXaxis()->SetTitle(t_xaxis_pt);
+	theL3Eff->GetXaxis()->SetRangeUser(0.,205.);
+	theL3Eff->GetYaxis()->SetRangeUser(0,1.04);
+//	theL3Eff->Draw("AP");
+//	TF1* L3Fit = logFitTest(15,numPtL3,denomPtL3);
+//	L3Fit->Draw("same");
+//	theL3Eff->Draw("P");
+//	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
+//	canvasL3->SaveAs(savePath + "/L3TauPt.pdf");
+
+	cout << " ***************** Plot: individual efficiencies over pT ****************** " << endl;
+	TCanvas* canvasIndPtEff = new TCanvas("canvasIndPtEff","canvasIndPtEff");
+	canvasIndPtEff->cd();
+
+	theL1Eff->SetLineColor(l1Color);
+	theL1Eff->SetMarkerColor(l1Color);
+	theL1Eff->SetMarkerStyle(21);
+	theL1Eff->GetXaxis()->SetNoExponent(true);
+	theL1Eff->Draw("AP");
+	theL2Eff->SetLineColor(l2Color);
+	theL2Eff->SetMarkerColor(l2Color);
+	theL2Eff->SetMarkerStyle(22);
+	theL2Eff->Draw("P");
+	theL2L2p5Eff->SetLineColor(l2p5Color);
+	theL2L2p5Eff->SetMarkerColor(l2p5Color);
+	theL2L2p5Eff->SetMarkerStyle(23);
+	theL2L2p5Eff->Draw("P");
+	theL3Eff->SetLineColor(l3Color);
+	theL3Eff->SetMarkerColor(l3Color);
+	theL3Eff->SetMarkerStyle(20);
+	theL3Eff->Draw("P");
+
+	TLegend* legendIndPtEff = new TLegend(0.5,0.18,0.92,0.38);
+	legendIndPtEff->SetBorderSize(1);
+	legendIndPtEff->SetTextSize(0.028);
+	legendIndPtEff->SetLineColor(1);
+	legendIndPtEff->SetLineStyle(1);
+	legendIndPtEff->SetLineWidth(1);
+	legendIndPtEff->SetFillColor(0);
+	legendIndPtEff->AddEntry(theL1Eff,		"L1","pel");
+	legendIndPtEff->AddEntry(theL2Eff,		"L2","pel");
+	legendIndPtEff->AddEntry(theL2L2p5Eff,	"L2 + L2.5","pel");
+	legendIndPtEff->AddEntry(theL3Eff,		"L3","pel");
+	legendIndPtEff->Draw();
+
+	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
+	canvasIndPtEff->SaveAs(savePath + "/IndLevelsTauPtEff.pdf");
+
 
     cout << " ***************** Plot: L1 Tau and Jet eff. over pT ****************** " << endl;
     TCanvas* canvasL1TauJet = new TCanvas("canvasL1TauJet","canvasL1TauJet");
@@ -90,7 +186,7 @@
 
     TH1F* numPtL1Jet = (TH1F*)l1File->Get("numeratorL1Jet_Total");
     TGraphAsymmErrors* theL1JetEff = new TGraphAsymmErrors(numPtL1Jet, denomPtL1TauJet, "cl=0.683 b(1,1) mode");
-    theL1JetEff->SetMarkerStyle(21);
+    theL1JetEff->SetMarkerStyle(20);
     theL1JetEff->SetMarkerColor(l1JetColor);
     theL1JetEff->SetLineColor(l1JetColor);
     theL1JetEff->Draw("P");
@@ -114,8 +210,8 @@
 
 
     cout << " ***************** Plot: L1 eff. over eta ****************** " << endl;
-    TCanvas* canvasL1eta = new TCanvas("canvasL1eta","canvasL1eta");
-    canvasL1eta->cd();
+//    TCanvas* canvasL1eta = new TCanvas("canvasL1eta","canvasL1eta");
+//    canvasL1eta->cd();
 
     TH1F* denomEtaL1 = (TH1F*)l1File->Get("denominatorEta_Total");
     TH1F* numEtaL1 = (TH1F*)l1File->Get("numeratorEtaL1_Total");
@@ -125,32 +221,15 @@
     theL1EtaEff->GetYaxis()->SetTitle(t_yaxis_eff);
     theL1EtaEff->GetXaxis()->SetTitle(t_xaxis_eta);
     theL1EtaEff->GetXaxis()->SetRangeUser(-2.5,2.5);
-    theL1EtaEff->GetYaxis()->SetRangeUser(0.82,1.04);
+    theL1EtaEff->GetYaxis()->SetRangeUser(effEtaLow,1.04);
     theL1EtaEff->GetYaxis()->SetNdivisions(508);
-    theL1EtaEff->Draw("AP");
-    latex.DrawLatex(xLatex,yLatex,latexText_fullL);
-    canvasL1eta->SaveAs(savePath + "/L1TauEtaEfficiency.pdf");
+//    theL1EtaEff->Draw("AP");
+//    latex.DrawLatex(xLatex,yLatex,latexText_fullL);
+//    canvasL1eta->SaveAs(savePath + "/L1TauEtaEfficiency.pdf");
 
-    cout << " ***************** Plot: L2 eff. over pT ****************** " << endl;
-    TCanvas* canvasL2 = new TCanvas("canvasL2","canvasL2");
-    canvasL2->cd();
-
-    TH1F* denomPtL2 = (TH1F*)hltFile->Get("denominator_Total");
-    TH1F* numPtL2 = (TH1F*)hltFile->Get("numeratorL2_Total");
-    TGraphAsymmErrors* theL2Eff = new TGraphAsymmErrors(numPtL2, denomPtL2, "cl=0.683 b(1,1) mode");
-    theL2Eff->GetYaxis()->SetTitle(t_yaxis_eff);
-    theL2Eff->GetXaxis()->SetTitle(t_xaxis_pt);
-    theL2Eff->GetXaxis()->SetRangeUser(0.,205.);
-    theL2Eff->GetYaxis()->SetRangeUser(0,1.04);
-    theL2Eff->Draw("AP");
-    TF1* L2Fit = logFitTest(15,numPtL2,denomPtL2);
-    L2Fit->Draw("same");
-    theL2Eff->Draw("P");
-    latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
-    canvasL2->SaveAs(savePath + "/L2TauPt.pdf");
 	cout << " ***************** Plot: L2 eff. over eta ****************** " << endl;
-	TCanvas* canvasL2eta = new TCanvas("canvasL2eta","canvasL2eta");
-	canvasL2eta->cd();
+//	TCanvas* canvasL2eta = new TCanvas("canvasL2eta","canvasL2eta");
+//	canvasL2eta->cd();
 
 	TH1F* denomEtaL2 = (TH1F*)hltFile->Get("denominatorEta_Total");
 	TH1F* numEtaL2 = (TH1F*)hltFile->Get("numeratorEtaL2_Total");
@@ -160,32 +239,15 @@
   	theL2EtaEff->GetYaxis()->SetTitle(t_yaxis_eff);
   	theL2EtaEff->GetXaxis()->SetTitle(t_xaxis_eta);
   	theL2EtaEff->GetXaxis()->SetRangeUser(-2.5,2.5);
-  	theL2EtaEff->GetYaxis()->SetRangeUser(0.62,1.04);
+  	theL2EtaEff->GetYaxis()->SetRangeUser(effEtaLow,1.04);
     theL2EtaEff->GetYaxis()->SetNdivisions(508);
-  	theL2EtaEff->Draw("AP");
-  	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
-  	canvasL2eta->SaveAs(savePath + "/L2TauEta.pdf");
+//  	theL2EtaEff->Draw("AP");
+//  	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
+//  	canvasL2eta->SaveAs(savePath + "/L2TauEta.pdf");
 
-	cout << " ***************** Plot: L2L2p5 eff. over pT ****************** " << endl;
-	TCanvas* canvasL2L2p5 = new TCanvas("canvasL2L2p5","canvasL2L2p5");
-	canvasL2L2p5->cd();
-
-	TH1F* denomPtL2L2p5 = (TH1F*)hltFile->Get("denominator_Total");
-	TH1F* numPtL2L2p5 = (TH1F*)hltFile->Get("numeratorL2L2p5_Total");
-	TGraphAsymmErrors* theL2L2p5Eff = new TGraphAsymmErrors(numPtL2L2p5, denomPtL2L2p5, "cl=0.683 b(1,1) mode");
-	theL2L2p5Eff->GetYaxis()->SetTitle(t_yaxis_eff);
-	theL2L2p5Eff->GetXaxis()->SetTitle(t_xaxis_pt);
-	theL2L2p5Eff->GetXaxis()->SetRangeUser(0.,205.);
-	theL2L2p5Eff->GetYaxis()->SetRangeUser(0,1.04);
-	theL2L2p5Eff->Draw("AP");
-	TF1* L2L2p5Fit = logFitTest(15,numPtL2L2p5,denomPtL2L2p5);
-	L2L2p5Fit->Draw("same");
-	theL2L2p5Eff->Draw("P");
-	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
-	canvasL2L2p5->SaveAs(savePath + "/L2L2p5TauPt.pdf");
 	cout << " ***************** Plot: L2L2p5 eff. over eta ****************** " << endl;
-	TCanvas* canvasL2L2p5eta = new TCanvas("canvasL2L2p5eta","canvasL2L2p5eta");
-	canvasL2L2p5eta->cd();
+//	TCanvas* canvasL2L2p5eta = new TCanvas("canvasL2L2p5eta","canvasL2L2p5eta");
+//	canvasL2L2p5eta->cd();
 
 	TH1F* denomEtaL2L2p5 = (TH1F*)hltFile->Get("denominatorEta_Total");
 	TH1F* numEtaL2L2p5 = (TH1F*)hltFile->Get("numeratorEtaL2L2p5_Total");
@@ -195,32 +257,15 @@
 	theL2L2p5EtaEff->GetYaxis()->SetTitle(t_yaxis_eff);
 	theL2L2p5EtaEff->GetXaxis()->SetTitle(t_xaxis_eta);
 	theL2L2p5EtaEff->GetXaxis()->SetRangeUser(-2.5,2.5);
-	theL2L2p5EtaEff->GetYaxis()->SetRangeUser(0.62,1.04);
+	theL2L2p5EtaEff->GetYaxis()->SetRangeUser(effEtaLow,1.04);
 	theL2L2p5EtaEff->GetYaxis()->SetNdivisions(508);
-	theL2L2p5EtaEff->Draw("AP");
-	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
-	canvasL2L2p5eta->SaveAs(savePath + "/L2L2p5TauEta.pdf");
+//	theL2L2p5EtaEff->Draw("AP");
+//	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
+//	canvasL2L2p5eta->SaveAs(savePath + "/L2L2p5TauEta.pdf");
 
-	cout << " ***************** Plot: L3 eff. over pT ****************** " << endl;
-	TCanvas* canvasL3 = new TCanvas("canvasL3","canvasL3");
-	canvasL3->cd();
-
-	TH1F* denomPtL3 = (TH1F*)hltFile->Get("denominator_Total");
-	TH1F* numPtL3 = (TH1F*)hltFile->Get("numeratorL3_Total");
-	TGraphAsymmErrors* theL3Eff = new TGraphAsymmErrors(numPtL3, denomPtL3, "cl=0.683 b(1,1) mode");
-	theL3Eff->GetYaxis()->SetTitle(t_yaxis_eff);
-	theL3Eff->GetXaxis()->SetTitle(t_xaxis_pt);
-	theL3Eff->GetXaxis()->SetRangeUser(0.,205.);
-	theL3Eff->GetYaxis()->SetRangeUser(0,1.04);
-	theL3Eff->Draw("AP");
-	TF1* L3Fit = logFitTest(15,numPtL3,denomPtL3);
-	L3Fit->Draw("same");
-	theL3Eff->Draw("P");
-	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
-	canvasL3->SaveAs(savePath + "/L3TauPt.pdf");
 	cout << " ***************** Plot: L3 eff. over eta ****************** " << endl;
-	TCanvas* canvasL3eta = new TCanvas("canvasL3eta","canvasL3eta");
-	canvasL3eta->cd();
+//	TCanvas* canvasL3eta = new TCanvas("canvasL3eta","canvasL3eta");
+//	canvasL3eta->cd();
 
 	TH1F* denomEtaL3 = (TH1F*)hltFile->Get("denominatorEta_Total");
 	TH1F* numEtaL3 = (TH1F*)hltFile->Get("numeratorEtaL3_Total");
@@ -230,19 +275,54 @@
 	theL3EtaEff->GetYaxis()->SetTitle(t_yaxis_eff);
 	theL3EtaEff->GetXaxis()->SetTitle(t_xaxis_eta);
 	theL3EtaEff->GetXaxis()->SetRangeUser(-2.5,2.5);
-	theL3EtaEff->GetYaxis()->SetRangeUser(0.62,1.04);
+	theL3EtaEff->GetYaxis()->SetRangeUser(effEtaLow,1.04);
 	theL3EtaEff->GetYaxis()->SetNdivisions(508);
-	theL3EtaEff->Draw("AP");
+//	theL3EtaEff->Draw("AP");
+//	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
+//	canvasL3eta->SaveAs(savePath + "/L3TauEta.pdf");
+
+	cout << " ***************** Plot: individual efficiencies over eta ****************** " << endl;
+	TCanvas* canvasIndEtaEff = new TCanvas("canvasIndEtaEff","canvasIndEtaEff");
+	canvasIndEtaEff->cd();
+
+	//theL1EtaEff->GetYaxis()->SetRangeUser(0.72,1.04);
+
+	theL1EtaEff->SetLineColor(l1Color);
+	theL1EtaEff->SetMarkerColor(l1Color);
+	theL1EtaEff->SetMarkerStyle(21);
+	theL1EtaEff->Draw("AP");
+	theL2EtaEff->SetLineColor(l2Color);
+	theL2EtaEff->SetMarkerColor(l2Color);
+	theL2EtaEff->SetMarkerStyle(22);
+	theL2EtaEff->Draw("P");
+	theL2L2p5EtaEff->SetLineColor(l2p5Color);
+	theL2L2p5EtaEff->SetMarkerColor(l2p5Color);
+	theL2L2p5EtaEff->SetMarkerStyle(23);
+	theL2L2p5EtaEff->Draw("P");
+	theL3EtaEff->SetLineColor(l3Color);
+	theL3EtaEff->SetMarkerColor(l3Color);
+	theL3EtaEff->SetMarkerStyle(20);
+	theL3EtaEff->Draw("P");
+
+	TLegend* legendIndEtaEff = new TLegend(0.38,0.17,0.80,0.37);
+	legendIndEtaEff->SetBorderSize(1);
+	legendIndEtaEff->SetTextSize(0.028);
+	legendIndEtaEff->SetLineColor(1);
+	legendIndEtaEff->SetLineStyle(1);
+	legendIndEtaEff->SetLineWidth(1);
+	legendIndEtaEff->SetFillColor(0);
+	legendIndEtaEff->AddEntry(theL1EtaEff,		"L1","pel");
+	legendIndEtaEff->AddEntry(theL2EtaEff,		"L2","pel");
+	legendIndEtaEff->AddEntry(theL2L2p5EtaEff,	"L2 + L2.5","pel");
+	legendIndEtaEff->AddEntry(theL3EtaEff,		"L3","pel");
+	legendIndEtaEff->Draw();
+
 	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
-	canvasL3eta->SaveAs(savePath + "/L3TauEta.pdf");
-
-
-
-
+	canvasIndEtaEff->SaveAs(savePath + "/IndLevelsTauEtaEff.pdf");
 
 	cout << " ***************** Plot: L1L2 eff. over pT ****************** " << endl;
-	TCanvas* canvasL1L2 = new TCanvas("canvasL1L2","canvasL1L2");
-	canvasL1L2->cd();
+//	TCanvas* canvasL1L2 = new TCanvas("canvasL1L2","canvasL1L2");
+//	canvasL1L2->cd();
 
 	TH1F* denomPtL1L2 = (TH1F*)hltFile->Get("denominator_Total");
 	TH1F* numPtL1L2 = (TH1F*)hltFile->Get("numeratorL1L2_Total");
@@ -251,15 +331,88 @@
 	theL1L2Eff->GetXaxis()->SetTitle(t_xaxis_pt);
 	theL1L2Eff->GetXaxis()->SetRangeUser(0.,205.);
 	theL1L2Eff->GetYaxis()->SetRangeUser(0,1.04);
-	theL1L2Eff->Draw("AP");
-	TF1* L1L2Fit = logFitTest(15,numPtL1L2,denomPtL1L2);
-	L1L2Fit->Draw("same");
+//	theL1L2Eff->Draw("AP");
+//	TF1* L1L2Fit = logFitTest(15,numPtL1L2,denomPtL1L2);
+//	L1L2Fit->Draw("same");
+//	theL1L2Eff->Draw("P");
+//	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
+//	canvasL1L2->SaveAs(savePath + "/L1L2TauPt.pdf");
+
+	cout << " ***************** Plot: L1L2L2p5 eff. over pT ****************** " << endl;
+//	TCanvas* canvasL1L2L2p5 = new TCanvas("canvasL1L2L2p5","canvasL1L2L2p5");
+//	canvasL1L2L2p5->cd();
+
+	TH1F* denomPtL1L2L2p5 = (TH1F*)hltFile->Get("denominator_Total");
+	TH1F* numPtL1L2L2p5 = (TH1F*)hltFile->Get("numeratorL1L2L2p5_Total");
+	TGraphAsymmErrors* theL1L2L2p5Eff = new TGraphAsymmErrors(numPtL1L2L2p5, denomPtL1L2L2p5, "cl=0.683 b(1,1) mode");
+	theL1L2L2p5Eff->GetYaxis()->SetTitle(t_yaxis_eff);
+	theL1L2L2p5Eff->GetXaxis()->SetTitle(t_xaxis_pt);
+	theL1L2L2p5Eff->GetXaxis()->SetRangeUser(0.,205.);
+	theL1L2L2p5Eff->GetYaxis()->SetRangeUser(0,1.04);
+//	theL1L2L2p5Eff->Draw("AP");
+//	TF1* L1L2L2p5Fit = logFitTest(15,numPtL1L2L2p5,denomPtL1L2L2p5);
+//	L1L2L2p5Fit->Draw("same");
+//	theL1L2L2p5Eff->Draw("P");
+//	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
+//	canvasL1L2L2p5->SaveAs(savePath + "/L1L2L2p5TauPt.pdf");
+
+	cout << " ***************** Plot: L1_HLT eff. over pT ****************** " << endl;
+//	TCanvas* canvasL1_HLT = new TCanvas("canvasL1_HLT","canvasL1_HLT");
+//	canvasL1_HLT->cd();
+
+	TH1F* denomPtL1_HLT = (TH1F*)hltFile->Get("denominator_Total");
+	TH1F* numPtL1_HLT = (TH1F*)hltFile->Get("numeratorL1_HLT_Total");
+	TGraphAsymmErrors* theL1_HLTEff = new TGraphAsymmErrors(numPtL1_HLT, denomPtL1_HLT, "cl=0.683 b(1,1) mode");
+	theL1_HLTEff->GetYaxis()->SetTitle(t_yaxis_eff);
+	theL1_HLTEff->GetXaxis()->SetTitle(t_xaxis_pt);
+	theL1_HLTEff->GetXaxis()->SetRangeUser(0.,205.);
+	theL1_HLTEff->GetYaxis()->SetRangeUser(0,1.04);
+//	theL1_HLTEff->Draw("AP");
+//	TF1* L1_HLTFit = logFitTest(15,numPtL1_HLT,denomPtL1_HLT);
+//	L1_HLTFit->Draw("same");
+//	theL1_HLTEff->Draw("P");
+//	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
+//	canvasL1_HLT->SaveAs(savePath + "/L1_HLTTauPt.pdf");
+
+	cout << " ***************** Plot: accumulated efficiencies over pT ****************** " << endl;
+	TCanvas* canvasAccumPtEff = new TCanvas("canvasAccumPtEff","canvasAccumPtEff");
+	canvasAccumPtEff->cd();
+
+	theL1Eff->GetXaxis()->SetRangeUser(0.,205.);
+	theL1Eff->Draw("AP");
+	theL1L2Eff->SetLineColor(l2Color);
+	theL1L2Eff->SetMarkerColor(l2Color);
+	theL1L2Eff->SetMarkerStyle(22);
 	theL1L2Eff->Draw("P");
+	theL1L2L2p5Eff->SetLineColor(l2p5Color);
+	theL1L2L2p5Eff->SetMarkerColor(l2p5Color);
+	theL1L2L2p5Eff->SetMarkerStyle(23);
+	theL1L2L2p5Eff->Draw("P");
+	theL1_HLTEff->SetLineColor(l3Color);
+	theL1_HLTEff->SetMarkerColor(l3Color);
+	theL1_HLTEff->SetMarkerStyle(20);
+	theL1_HLTEff->Draw("P");
+
+	TLegend* legendAccumPtEff = new TLegend(0.5,0.18,0.92,0.38);
+	legendAccumPtEff->SetBorderSize(1);
+	legendAccumPtEff->SetTextSize(0.028);
+	legendAccumPtEff->SetLineColor(1);
+	legendAccumPtEff->SetLineStyle(1);
+	legendAccumPtEff->SetLineWidth(1);
+	legendAccumPtEff->SetFillColor(0);
+	legendAccumPtEff->AddEntry(theL1Eff,		"L1","pel");
+	legendAccumPtEff->AddEntry(theL1L2Eff,		"L1 + L2","pel");
+	legendAccumPtEff->AddEntry(theL1L2L2p5Eff,	"L1 + L2 + L2.5","pel");
+	legendAccumPtEff->AddEntry(theL1_HLTEff,	"L1 + L2 + L2.5 + L3","pel");
+	legendAccumPtEff->Draw();
+
 	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
-	canvasL1L2->SaveAs(savePath + "/L1L2TauPt.pdf");
+	canvasAccumPtEff->SaveAs(savePath + "/AccumLevelsTauPtEff.pdf");
+
+
 	cout << " ***************** Plot: L1L2 eff. over eta ****************** " << endl;
-	TCanvas* canvasL1L2eta = new TCanvas("canvasL1L2eta","canvasL1L2eta");
-	canvasL1L2eta->cd();
+//	TCanvas* canvasL1L2eta = new TCanvas("canvasL1L2eta","canvasL1L2eta");
+//	canvasL1L2eta->cd();
 
 	TH1F* denomEtaL1L2 = (TH1F*)hltFile->Get("denominatorEta_Total");
 	TH1F* numEtaL1L2 = (TH1F*)hltFile->Get("numeratorEtaL1L2_Total");
@@ -271,30 +424,14 @@
 	theL1L2EtaEff->GetXaxis()->SetRangeUser(-2.5,2.5);
 	theL1L2EtaEff->GetYaxis()->SetRangeUser(0.62,1.04);
 	theL1L2EtaEff->GetYaxis()->SetNdivisions(508);
-	theL1L2EtaEff->Draw("AP");
-	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
-	canvasL1L2eta->SaveAs(savePath + "/L1L2TauEta.pdf");
+//	theL1L2EtaEff->Draw("AP");
+//	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
+//	canvasL1L2eta->SaveAs(savePath + "/L1L2TauEta.pdf");
 
-	cout << " ***************** Plot: L1L2L2p5 eff. over pT ****************** " << endl;
-	TCanvas* canvasL1L2L2p5 = new TCanvas("canvasL1L2L2p5","canvasL1L2L2p5");
-	canvasL1L2L2p5->cd();
 
-	TH1F* denomPtL1L2L2p5 = (TH1F*)hltFile->Get("denominator_Total");
-	TH1F* numPtL1L2L2p5 = (TH1F*)hltFile->Get("numeratorL1L2L2p5_Total");
-	TGraphAsymmErrors* theL1L2L2p5Eff = new TGraphAsymmErrors(numPtL1L2L2p5, denomPtL1L2L2p5, "cl=0.683 b(1,1) mode");
-	theL1L2L2p5Eff->GetYaxis()->SetTitle(t_yaxis_eff);
-	theL1L2L2p5Eff->GetXaxis()->SetTitle(t_xaxis_pt);
-	theL1L2L2p5Eff->GetXaxis()->SetRangeUser(0.,205.);
-	theL1L2L2p5Eff->GetYaxis()->SetRangeUser(0,1.04);
-	theL1L2L2p5Eff->Draw("AP");
-	TF1* L1L2L2p5Fit = logFitTest(15,numPtL1L2L2p5,denomPtL1L2L2p5);
-	L1L2L2p5Fit->Draw("same");
-	theL1L2L2p5Eff->Draw("P");
-	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
-	canvasL1L2L2p5->SaveAs(savePath + "/L1L2L2p5TauPt.pdf");
 	cout << " ***************** Plot: L1L2L2p5 eff. over eta ****************** " << endl;
-	TCanvas* canvasL1L2L2p5eta = new TCanvas("canvasL1L2L2p5eta","canvasL1L2L2p5eta");
-	canvasL1L2L2p5eta->cd();
+//	TCanvas* canvasL1L2L2p5eta = new TCanvas("canvasL1L2L2p5eta","canvasL1L2L2p5eta");
+//	canvasL1L2L2p5eta->cd();
 
 	TH1F* denomEtaL1L2L2p5 = (TH1F*)hltFile->Get("denominatorEta_Total");
 	TH1F* numEtaL1L2L2p5 = (TH1F*)hltFile->Get("numeratorEtaL1L2L2p5_Total");
@@ -306,30 +443,13 @@
 	theL1L2L2p5EtaEff->GetXaxis()->SetRangeUser(-2.5,2.5);
 	theL1L2L2p5EtaEff->GetYaxis()->SetRangeUser(0.62,1.04);
 	theL1L2L2p5EtaEff->GetYaxis()->SetNdivisions(508);
-	theL1L2L2p5EtaEff->Draw("AP");
-	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
-	canvasL1L2L2p5eta->SaveAs(savePath + "/L1L2L2p5TauEta.pdf");
+//	theL1L2L2p5EtaEff->Draw("AP");
+//	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
+//	canvasL1L2L2p5eta->SaveAs(savePath + "/L1L2L2p5TauEta.pdf");
 
-	cout << " ***************** Plot: L1_HLT eff. over pT ****************** " << endl;
-	TCanvas* canvasL1_HLT = new TCanvas("canvasL1_HLT","canvasL1_HLT");
-	canvasL1_HLT->cd();
-
-	TH1F* denomPtL1_HLT = (TH1F*)hltFile->Get("denominator_Total");
-	TH1F* numPtL1_HLT = (TH1F*)hltFile->Get("numeratorL1_HLT_Total");
-	TGraphAsymmErrors* theL1_HLTEff = new TGraphAsymmErrors(numPtL1_HLT, denomPtL1_HLT, "cl=0.683 b(1,1) mode");
-	theL1_HLTEff->GetYaxis()->SetTitle(t_yaxis_eff);
-	theL1_HLTEff->GetXaxis()->SetTitle(t_xaxis_pt);
-	theL1_HLTEff->GetXaxis()->SetRangeUser(0.,205.);
-	theL1_HLTEff->GetYaxis()->SetRangeUser(0,1.04);
-	theL1_HLTEff->Draw("AP");
-	TF1* L1_HLTFit = logFitTest(15,numPtL1_HLT,denomPtL1_HLT);
-	L1_HLTFit->Draw("same");
-	theL1_HLTEff->Draw("P");
-	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
-	canvasL1_HLT->SaveAs(savePath + "/L1_HLTTauPt.pdf");
 	cout << " ***************** Plot: L1_HLT eff. over eta ****************** " << endl;
-	TCanvas* canvasL1_HLTeta = new TCanvas("canvasL1_HLTeta");
-	canvasL1_HLTeta->cd();
+//	TCanvas* canvasL1_HLTeta = new TCanvas("canvasL1_HLTeta","canvasL1_HLTeta");
+//	canvasL1_HLTeta->cd();
 
 	TH1F* denomEtaL1_HLT = (TH1F*)hltFile->Get("denominatorEta_Total");
 	TH1F* numEtaL1_HLT = (TH1F*)hltFile->Get("numeratorEtaL1_HLT_Total");
@@ -341,9 +461,116 @@
 	theL1_HLTEtaEff->GetXaxis()->SetRangeUser(-2.5,2.5);
 	theL1_HLTEtaEff->GetYaxis()->SetRangeUser(0.62,1.04);
 	theL1_HLTEtaEff->GetYaxis()->SetNdivisions(508);
-	theL1_HLTEtaEff->Draw("AP");
+//	theL1_HLTEtaEff->Draw("AP");
+//	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
+//	canvasL1_HLTeta->SaveAs(savePath + "/L1_HLTTauEta.pdf");
+
+	cout << " ***************** Plot: accumulated efficiencies over eta ****************** " << endl;
+	TCanvas* canvasAccumEtaEff = new TCanvas("canvasAccumEtaEff","canvasAccumEtaEff");
+	canvasAccumEtaEff->cd();
+
+	theL1EtaEff->GetYaxis()->SetRangeUser(effEtaLow,1.04);
+
+	theL1EtaEff->SetLineColor(l1Color);
+	theL1EtaEff->SetMarkerColor(l1Color);
+	theL1EtaEff->SetMarkerStyle(21);
+	theL1EtaEff->Draw("AP");
+	theL1L2EtaEff->SetLineColor(l2Color);
+	theL1L2EtaEff->SetMarkerColor(l2Color);
+	theL1L2EtaEff->SetMarkerStyle(22);
+	theL1L2EtaEff->Draw("P");
+	theL1L2L2p5EtaEff->SetLineColor(l2p5Color);
+	theL1L2L2p5EtaEff->SetMarkerColor(l2p5Color);
+	theL1L2L2p5EtaEff->SetMarkerStyle(23);
+	theL1L2L2p5EtaEff->Draw("P");
+	theL1_HLTEtaEff->SetLineColor(l3Color);
+	theL1_HLTEtaEff->SetMarkerColor(l3Color);
+	theL1_HLTEtaEff->SetMarkerStyle(20);
+	theL1_HLTEtaEff->Draw("P");
+
+	TLegend* legendAccumEtaEff = new TLegend(0.38,0.17,0.80,0.37);
+	legendAccumEtaEff->SetBorderSize(1);
+	legendAccumEtaEff->SetTextSize(0.028);
+	legendAccumEtaEff->SetLineColor(1);
+	legendAccumEtaEff->SetLineStyle(1);
+	legendAccumEtaEff->SetLineWidth(1);
+	legendAccumEtaEff->SetFillColor(0);
+	legendAccumEtaEff->AddEntry(theL1EtaEff,		"L1","pel");
+	legendAccumEtaEff->AddEntry(theL2EtaEff,		"L1 + L2","pel");
+	legendAccumEtaEff->AddEntry(theL2L2p5EtaEff,	"L1 + L2 + L2.5","pel");
+	legendAccumEtaEff->AddEntry(theL1_HLTEtaEff,	"L1 + L2 + L2.5 + L3","pel");
+	legendAccumEtaEff->Draw();
+
 	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
-	canvasL1_HLTeta->SaveAs(savePath + "/L1_HLTTauEta.pdf");
+	canvasAccumEtaEff->SaveAs(savePath + "/AccumLevelsTauEtaEff.pdf");
+
+	cout << " ***************** Plot: L1_HLT eff. over pT with fit ****************** " << endl;
+	TCanvas* canvasL1_HLT = new TCanvas("canvasL1_HLT","canvasL1_HLT");
+	canvasL1_HLT->cd();
+
+	theL1_HLTEff->Draw("AP");
+	TF1* L1_HLTFit = logFitTest(15,numPtL1_HLT,denomPtL1_HLT);
+	L1_HLTFit->SetLineColor(1);
+	L1_HLTFit->SetLineWidth(2);
+	L1_HLTFit->Draw("same");
+	theL1_HLTEff->Draw("P");
+
+	TLegend* legendAccumPtEff = new TLegend(0.5,0.18,0.92,0.38);
+	legendAccumPtEff->SetBorderSize(1);
+	legendAccumPtEff->SetTextSize(0.028);
+	legendAccumPtEff->SetLineColor(1);
+	legendAccumPtEff->SetLineStyle(1);
+	legendAccumPtEff->SetLineWidth(1);
+	legendAccumPtEff->SetFillColor(0);
+	legendAccumPtEff->AddEntry(theL1_HLTEff,	"L1 + L2 + L2.5 + L3","pel");
+	legendAccumPtEff->AddEntry(L1_HLTFit,		"Fit","l");
+	legendAccumPtEff->Draw();
+
+	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
+	canvasL1_HLT->SaveAs(savePath + "/L1_HLTTauPtFit.pdf");
+
+	cout << " ***************** Plot: L1_HLT eff. over pT with fit and full result ****************** " << endl;
+	TCanvas* canvasL1_HLTfullResult = new TCanvas("canvasL1_HLTfullResult","canvasL1_HLTfullResult");
+	canvasL1_HLTfullResult->cd();
+
+	theL1_HLTEff->GetYaxis()->SetRangeUser(0.38,1.04);
+	theL1_HLTEff->Draw("AP");
+	L1_HLTFit->Draw("same");
+
+	TF1* fullResult = new TF1("fullResult", eff2012IsoTau19fb_Plot, 0., 200., 0);
+	fullResult->SetLineColor(2);
+	L1_HLTFit->SetLineWidth(2);
+	fullResult->Draw("same");
+	theL1_HLTEff->Draw("P");
+
+	TLegend* legendAccumPtEffFullResult = new TLegend(0.5,0.18,0.92,0.38);
+	legendAccumPtEffFullResult->SetBorderSize(1);
+	legendAccumPtEffFullResult->SetTextSize(0.028);
+	legendAccumPtEffFullResult->SetLineColor(1);
+	legendAccumPtEffFullResult->SetLineStyle(1);
+	legendAccumPtEffFullResult->SetLineWidth(1);
+	legendAccumPtEffFullResult->SetFillColor(0);
+	legendAccumPtEffFullResult->AddEntry(theL1_HLTEff,	"L1 + L2 + L2.5 + L3","pel");
+	legendAccumPtEffFullResult->AddEntry(L1_HLTFit,		"Fit","l");
+	legendAccumPtEffFullResult->AddEntry(fullResult,		"Combination of Fits","l");
+
+	legendAccumPtEffFullResult->Draw();
+
+	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
+	canvasL1_HLTfullResult->SaveAs(savePath + "/L1_HLTTauPtFitFullResult.pdf");
+
+
+	cout << " ***************** Plot: efficiencies over pT in log scale ****************** " << endl;
+
+	canvasIndPtEff->SetLogx(true);
+	theL1Eff->GetXaxis()->SetMoreLogLabels();
+	theL1Eff->Draw("a");
+	canvasIndPtEff->SaveAs(savePath + "/IndLevelsTauPtEff_logX.pdf");
+
+	canvasAccumPtEff->SetLogx(true);
+	canvasAccumPtEff->SaveAs(savePath + "/AccumLevelsTauPtEff_logX.pdf");
+
+
 
 	cout << " ***************** Plot: eta resolutions ****************** " << endl;
 	TCanvas* canvasetaResol = new TCanvas("canvasL1etaResol","canvasL1etaResol");
@@ -471,7 +698,6 @@
     l1TauRate->SetName("");
     l1TauRate->SetTitle("");
     l1TauRate->SetFillColor(1);
-    l1TauRate->SetMarkerStyle(20);
     l1TauRate->SetPoint(0,0,622001.6);
     l1TauRate->SetPointError(0,0,600.2809);
     l1TauRate->SetPoint(1,4,622001.6);
@@ -530,7 +756,6 @@
     l1JetRate->SetName("");
     l1JetRate->SetTitle("");
     l1JetRate->SetFillColor(1);
-    l1JetRate->SetMarkerStyle(20);
     l1JetRate->SetPoint(0,0,926028.8);
     l1JetRate->SetPointError(0,0,732.437);
     l1JetRate->SetPoint(1,4,926028.8);
@@ -593,7 +818,7 @@
     l1TauRate->SetMarkerColor(l1TauColor);
     l1TauRate->SetLineColor(l1TauColor);
     l1TauRate->Draw("AP");
-    l1JetRate->SetMarkerStyle(21);
+    l1JetRate->SetMarkerStyle(20);
     l1JetRate->SetMarkerColor(l1JetColor);
     l1JetRate->SetLineColor(l1JetColor);
     l1JetRate->Draw("P");

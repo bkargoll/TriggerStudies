@@ -425,3 +425,16 @@ TF1* logFitTest(int setMinBinUsedByFit, TH1F* passed, TH1F* all) {
 //	return fCrystal;
 //}
 
+double eff2012IsoTau19fb(double pt){
+  return (808.411*(0.764166*0.5*(TMath::Erf((pt-33.2236)/2./0.97289/sqrt(pt))+1.))+
+          4428.0*(0.802387*0.5*(TMath::Erf((pt-38.0971)/2./0.82842/sqrt(pt))+1.))+
+          1783.003*(0.818051*0.5*(TMath::Erf((pt-37.3669)/2./0.74847/sqrt(pt))+1.))+
+          5109.155*(0.796086*0.5*(TMath::Erf((pt-37.3302)/2./0.757558/sqrt(pt))+1.))+
+          4131*(0.828182*0.5*(TMath::Erf((pt-37.6596)/2./0.830682/sqrt(pt))+1.))+
+          3143*(0.833004*0.5*(TMath::Erf((pt-37.634)/2./0.777843/sqrt(pt))+1.))
+          )/(808.411+4428.0+1783.003+5109.155+4131+3143);
+}
+
+double eff2012IsoTau19fb_Plot(double *x, double *par){
+	return eff2012IsoTau19fb(x[0]);
+}
