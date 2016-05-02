@@ -16,7 +16,10 @@ xbins = array.array('d',xbin)
 
 #xbineta = [0.,0.25,0.5,0.75,1.0,1.2221,1.4442,1.556,1.8,2.1]
 #xbineta = [-2.1,-1.8,-1.556,-1.4442,-1.2221,-1.0,-0.75,-0.5,-0.25,0.,0.25,0.5,0.75,1.0,1.2221,1.4442,1.556,1.8,2.1]
-xbineta = [-2.5, -2.4, -2.3, -2.2, -2.1, -2.0, -1.9, -1.8, -1.7, -1.6, -1.5, -1.4, -1.3, -1.2, -1.1, -1.0, -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5]
+#xbineta = [-2.5, -2.4, -2.3, -2.2, -2.1, -2.0, -1.9, -1.8, -1.7, -1.6, -1.5, -1.4, -1.3, -1.2, -1.1, -1.0, -0.9, -0.8, -0.7, -0.6, -0.5, -0.4, -0.3, -0.2, -0.1, 0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5]
+# xbins accordnig to the size of trigger regions
+xbineta = [-3.0, -2.172, -1.740, -1.392, -1.044, -0.696, -0.348, 0.0, 0.348, 0.696, 1.044, 1.392, 1.740, 2.172, 3.0]
+
 xbinseta = array.array('d',xbineta)
 
 def histograms(fileName, labelOffline, labelL1, labelL2, labelL2p5, labelL3, L1TauPtCut=0, L1JetPtCut=0, L2PtCut=25., L3PtCut=25., MTCut=40., invertMT=False,
@@ -555,7 +558,7 @@ def executeCode(cfgFileName):
     ptThresholds = "ptThr"
     if ((cfg.l1tauPt != 0) | (cfg.l1jetPt != 0)): ptThresholds += ("-" + str(cfg.l1tauPt) + "-" + str(cfg.l1jetPt))
     ptThresholds += "-" + str(cfg.l2Pt) + "-" + str(cfg.l3Pt)
-    outputFileName = "/user/kargoll/results/TurnOns/forPhdThesis/" + cfg.path + "/turnOn_" + cfg.dataset + "_" + offlineLabel + "_L3" + cfg.l3Label[-10:] + "_" + ptThresholds + "_dZ" + str(cfg.dZ) + prongLabel + "_MT" + str(cfg.MT) + mtLabel + offlProngsLabel + invMLabel + "_smB.root"
+    outputFileName = "/user/kargoll/results/TurnOns/forPhdThesis/newEtaBins/" + cfg.path + "/turnOn_" + cfg.dataset + "_" + offlineLabel + "_L3" + cfg.l3Label[-10:] + "_" + ptThresholds + "_dZ" + str(cfg.dZ) + prongLabel + "_MT" + str(cfg.MT) + mtLabel + offlProngsLabel + invMLabel + "_smB.root"
 
 
 

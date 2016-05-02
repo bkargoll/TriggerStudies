@@ -10,9 +10,9 @@
   //gROOT->SetBatch();
 
   // load input files
-  TString folder = "/user/kargoll/results/TurnOns/forPhdThesis/DoubleTauJet/";
-  TFile* l1File = new TFile(folder + "turnOn_Run2012ABCD_forPhdThesis.root");
-  TFile* hltFile = new TFile(folder + "turnOn_Run2012BCD_forPhdThesis.root");
+  TString folder = "/user/kargoll/results/TurnOns/forPhdThesis/newEtaBins/DoubleTauJet/CombinedWithWeights/";
+  TFile* l1File = new TFile(folder + "turnOn_Run2012ABCD_forPhdThesis_weighted.root");
+  TFile* hltFile = new TFile(folder + "turnOn_Run2012BCD_forPhdThesis_weighted.root");
 
   // style options
   int fitColor = 1;
@@ -23,8 +23,8 @@
   //gStyle->SetOptFit(0);
   gStyle->SetTitleXOffset(0.95);
 
-  // rebin x-axis for eff(eta) plots (must be devider of 50)
-  int rebin_eff = 5;
+  // rebin x-axis for eff(eta) plots
+  int rebin_eff = 1;
   // low edge of y-axis for eff(eta) plots
   double effEtaLow = 0.54;
 
@@ -54,8 +54,10 @@
   // text templatex
   TString t_xaxis_pt	= "p_{T}(#tau_{h}) / GeV";
   TString t_xaxis_ptresol	= "p_{T}(#tau_{h}) resolution / GeV";
+  t_xaxis_ptresol	= "(p_{T}^{trigger} - p_{T}^{offline}) / GeV";
   TString t_xaxis_eta	= "#eta(#tau_{h})";
   TString t_xaxis_etaresol	= "#eta(#tau_{h}) resolution";
+  t_xaxis_etaresol	= "#eta^{trigger} - #eta^{offline}";
   TString t_yaxis_eff	= "Efficiency";
   TString t_yaxis_dens	= "Density";
 
@@ -70,6 +72,7 @@
     theL1Eff->GetXaxis()->SetTitle(t_xaxis_pt);
     theL1Eff->GetXaxis()->SetRangeUser(0.,205.);
     theL1Eff->GetYaxis()->SetRangeUser(0.,1.04);
+    theL1Eff->GetXaxis()->SetNdivisions(505, true);
 
 //    theL1Eff->Draw("AP");
 //    latex.DrawLatex(xLatex,yLatex,latexText_fullL);
@@ -151,7 +154,7 @@
 	theL3Eff->SetMarkerStyle(20);
 	theL3Eff->Draw("P");
 
-	TLegend* legendIndPtEff = new TLegend(0.5,0.18,0.92,0.38);
+	TLegend* legendIndPtEff = new TLegend(0.55,0.18,0.92,0.38);
 	legendIndPtEff->SetBorderSize(1);
 	legendIndPtEff->SetTextSize(0.028);
 	legendIndPtEff->SetLineColor(1);
@@ -166,6 +169,23 @@
 
 	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
 	canvasIndPtEff->SaveAs(savePath + "/IndLevelsTauPtEff.pdf");
+
+	cout << " ***************** Plot: individual efficiencies over pT in log scale ****************** " << endl;
+	TCanvas* canvasIndPtEffLog = new TCanvas("canvasIndPtEffLog","canvasIndPtEffLog");
+	canvasIndPtEffLog->cd();
+	canvasIndPtEffLog->SetLogx(true);
+
+	theL1Eff->GetXaxis()->SetRange(0,0); // ensure that plotted range is identical in both log plots
+
+	theL1Eff->Draw("AP");
+	theL2Eff->Draw("P");
+	theL2L2p5Eff->Draw("P");
+	theL3Eff->Draw("P");
+
+	legendIndPtEff->Draw();
+
+	theL1Eff->GetXaxis()->SetMoreLogLabels();
+	canvasIndPtEffLog->SaveAs(savePath + "/IndLevelsTauPtEff_logX.pdf");
 
 
     cout << " ***************** Plot: L1 Tau and Jet eff. over pT ****************** " << endl;
@@ -182,6 +202,8 @@
     theL1TauEff->SetMarkerStyle(22);
     theL1TauEff->SetMarkerColor(l1TauColor);
     theL1TauEff->SetLineColor(l1TauColor);
+    theL1TauEff->GetYaxis()->SetNdivisions(508);
+    theL1TauEff->GetXaxis()->SetNdivisions(505, true);
     theL1TauEff->Draw("AP");
 
     TH1F* numPtL1Jet = (TH1F*)l1File->Get("numeratorL1Jet_Total");
@@ -393,7 +415,7 @@
 	theL1_HLTEff->SetMarkerStyle(20);
 	theL1_HLTEff->Draw("P");
 
-	TLegend* legendAccumPtEff = new TLegend(0.5,0.18,0.92,0.38);
+	TLegend* legendAccumPtEff = new TLegend(0.55,0.18,0.92,0.38);
 	legendAccumPtEff->SetBorderSize(1);
 	legendAccumPtEff->SetTextSize(0.028);
 	legendAccumPtEff->SetLineColor(1);
@@ -409,6 +431,22 @@
 	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
 	canvasAccumPtEff->SaveAs(savePath + "/AccumLevelsTauPtEff.pdf");
 
+	cout << " ***************** Plot: accumulated efficiencies over pT in log scale ****************** " << endl;
+	TCanvas* canvasAccumPtEffLog = new TCanvas("canvasAccumPtEffLog","canvasAccumPtEffLog");
+	canvasAccumPtEffLog->cd();
+	canvasAccumPtEffLog->SetLogx(true);
+
+	theL1Eff->GetXaxis()->SetRange(0,0); // ensure that plotted range is identical in both log plots
+
+	theL1Eff->Draw("AP");
+	theL1L2Eff->Draw("P");
+	theL1L2L2p5Eff->Draw("P");
+	theL1_HLTEff->Draw("P");
+
+	legendAccumPtEff->Draw();
+
+	theL1Eff->GetXaxis()->SetMoreLogLabels();
+	canvasAccumPtEffLog->SaveAs(savePath + "/AccumLevelsTauPtEff_logX.pdf");
 
 	cout << " ***************** Plot: L1L2 eff. over eta ****************** " << endl;
 //	TCanvas* canvasL1L2eta = new TCanvas("canvasL1L2eta","canvasL1L2eta");
@@ -508,6 +546,7 @@
 	TCanvas* canvasL1_HLT = new TCanvas("canvasL1_HLT","canvasL1_HLT");
 	canvasL1_HLT->cd();
 
+	theL1_HLTEff->GetXaxis()->SetNdivisions(505, true);
 	theL1_HLTEff->Draw("AP");
 	TF1* L1_HLTFit = logFitTest(15,numPtL1_HLT,denomPtL1_HLT);
 	L1_HLTFit->SetLineColor(1);
@@ -515,7 +554,7 @@
 	L1_HLTFit->Draw("same");
 	theL1_HLTEff->Draw("P");
 
-	TLegend* legendAccumPtEff = new TLegend(0.5,0.18,0.92,0.38);
+	TLegend* legendAccumPtEff = new TLegend(0.55,0.18,0.92,0.38);
 	legendAccumPtEff->SetBorderSize(1);
 	legendAccumPtEff->SetTextSize(0.028);
 	legendAccumPtEff->SetLineColor(1);
@@ -543,7 +582,7 @@
 	fullResult->Draw("same");
 	theL1_HLTEff->Draw("P");
 
-	TLegend* legendAccumPtEffFullResult = new TLegend(0.5,0.18,0.92,0.38);
+	TLegend* legendAccumPtEffFullResult = new TLegend(0.55,0.18,0.92,0.38);
 	legendAccumPtEffFullResult->SetBorderSize(1);
 	legendAccumPtEffFullResult->SetTextSize(0.028);
 	legendAccumPtEffFullResult->SetLineColor(1);
@@ -552,7 +591,7 @@
 	legendAccumPtEffFullResult->SetFillColor(0);
 	legendAccumPtEffFullResult->AddEntry(theL1_HLTEff,	"L1 + L2 + L2.5 + L3","pel");
 	legendAccumPtEffFullResult->AddEntry(L1_HLTFit,		"Fit","l");
-	legendAccumPtEffFullResult->AddEntry(fullResult,		"Combination of Fits","l");
+	legendAccumPtEffFullResult->AddEntry(fullResult,	"Combination of Fits","l");
 
 	legendAccumPtEffFullResult->Draw();
 
@@ -560,21 +599,12 @@
 	canvasL1_HLTfullResult->SaveAs(savePath + "/L1_HLTTauPtFitFullResult.pdf");
 
 
-	cout << " ***************** Plot: efficiencies over pT in log scale ****************** " << endl;
-
-	canvasIndPtEff->SetLogx(true);
-	theL1Eff->GetXaxis()->SetMoreLogLabels();
-	theL1Eff->Draw("a");
-	canvasIndPtEff->SaveAs(savePath + "/IndLevelsTauPtEff_logX.pdf");
-
-	canvasAccumPtEff->SetLogx(true);
-	canvasAccumPtEff->SaveAs(savePath + "/AccumLevelsTauPtEff_logX.pdf");
-
-
-
 	cout << " ***************** Plot: eta resolutions ****************** " << endl;
 	TCanvas* canvasetaResol = new TCanvas("canvasL1etaResol","canvasL1etaResol");
 	canvasetaResol->cd();
+
+	double offset = 1.1;
+	double size	= 0.05;
 
 	TH1F* etaResolL1 = (TH1F*)l1File->Get("resEtaL1_Total");
 	etaResolL1->Sumw2();
@@ -584,6 +614,15 @@
     etaResolL1->GetXaxis()->SetTitle(t_xaxis_etaresol);
     etaResolL1->GetXaxis()->SetRangeUser(-0.35,0.35);
     etaResolL1->GetYaxis()->SetTitleOffset(1.25);
+
+    etaResolL1->GetXaxis()->SetTitleOffset(offset);
+    etaResolL1->GetXaxis()->SetTitleSize(size);
+    etaResolL1->GetXaxis()->SetLabelSize(0.85*size);
+    etaResolL1->GetYaxis()->SetTitleOffset(1.3);
+    etaResolL1->GetYaxis()->SetTitleSize(size);
+    etaResolL1->GetYaxis()->SetLabelSize(0.85*size);
+
+
     for (unsigned int i = 1; i<=etaResolL1->GetNbinsX(); i++){
     	if (etaResolL1->GetBinContent(i) == 0.)
     		etaResolL1->SetBinContent(i,0.000001);
@@ -651,6 +690,14 @@
     ptResolL1->SetLineColor(l1Color);
     ptResolL1->SetLineStyle(9);
     ptResolL1->SetLineWidth(2);
+
+    ptResolL1->GetXaxis()->SetTitleOffset(offset);
+    ptResolL1->GetXaxis()->SetTitleSize(size);
+    ptResolL1->GetXaxis()->SetLabelSize(0.85*size);
+    ptResolL1->GetYaxis()->SetTitleOffset(1.3);
+    ptResolL1->GetYaxis()->SetTitleSize(size);
+    ptResolL1->GetYaxis()->SetLabelSize(0.85*size);
+
 
 	TH1F* ptResolL2 = (TH1F*)hltFile->Get("resPtL2_Total");
 	ptResolL2->Sumw2();
