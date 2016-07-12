@@ -268,7 +268,7 @@ def histograms(fileName, labelOffline, labelL1, labelL2, labelL2p5, labelL3, L1T
         for iTau in offlineTaus:
             cntTaus += 1
             if iTau.pt() < 5: continue
-            if abs(iTau.eta()) > 2.1: continue
+            if abs(iTau.eta()) > 2.5: continue
             # check: select only taus in 2nd peak structure 
             # if ((iTau.pt() < 55) or  (iTau.pt() > 100)): continue
             # muon and tau with opposite charge
@@ -558,7 +558,7 @@ def executeCode(cfgFileName):
     ptThresholds = "ptThr"
     if ((cfg.l1tauPt != 0) | (cfg.l1jetPt != 0)): ptThresholds += ("-" + str(cfg.l1tauPt) + "-" + str(cfg.l1jetPt))
     ptThresholds += "-" + str(cfg.l2Pt) + "-" + str(cfg.l3Pt)
-    outputFileName = "/user/kargoll/results/TurnOns/forPhdThesis/newEtaBins/" + cfg.path + "/turnOn_" + cfg.dataset + "_" + offlineLabel + "_L3" + cfg.l3Label[-10:] + "_" + ptThresholds + "_dZ" + str(cfg.dZ) + prongLabel + "_MT" + str(cfg.MT) + mtLabel + offlProngsLabel + invMLabel + "_smB.root"
+    outputFileName = "/user/kargoll/results/TurnOns/forPhdThesis/Eta2p5/" + cfg.path + "/turnOn_" + cfg.dataset + "_" + offlineLabel + "_L3" + cfg.l3Label[-10:] + "_" + ptThresholds + "_dZ" + str(cfg.dZ) + prongLabel + "_MT" + str(cfg.MT) + mtLabel + offlProngsLabel + invMLabel + "_smB.root"
 
 
 

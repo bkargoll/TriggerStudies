@@ -61,6 +61,128 @@
   TString t_yaxis_eff	= "Efficiency";
   TString t_yaxis_dens	= "Density";
 
+  cout << " ***************** Plot: Trigger rates vs runs ****************** " << endl;
+  TFile* rateFile = new TFile("../triggerRates.root", "read");
+  TGraph* pure_Jet = (TGraph*)rateFile->Get("pureRate_HLT_DoubleMediumIsoPFTau25_Trk5_eta2p1_Jet30_v4");
+  TGraph* norm_Jet = (TGraph*)rateFile->Get("normRate_HLT_DoubleMediumIsoPFTau25_Trk5_eta2p1_Jet30_v4");
+  TGraph* pure_1prong = (TGraph*)rateFile->Get("pureRate_HLT_DoubleMediumIsoPFTau35_Trk1_eta2p1_Prong1_v1");
+  TGraph* norm_1prong = (TGraph*)rateFile->Get("normRate_HLT_DoubleMediumIsoPFTau35_Trk1_eta2p1_Prong1_v1");
+  TGraph* pure_Parked = (TGraph*)rateFile->Get("pureRate_HLT_DoubleMediumIsoPFTau35_Trk1_eta2p1_v4");
+  TGraph* norm_Parked = (TGraph*)rateFile->Get("normRate_HLT_DoubleMediumIsoPFTau35_Trk1_eta2p1_v4");
+
+  pure_Parked->SetMarkerColor(col_rwth_bordeaux);
+  pure_Parked->SetMarkerStyle(23);
+  norm_Parked->SetMarkerColor(col_rwth_bordeaux);
+  norm_Parked->SetMarkerStyle(23);
+  pure_Jet->SetMarkerColor(col_rwth_darkblue);
+  pure_Jet->SetMarkerStyle(21);
+  norm_Jet->SetMarkerColor(col_rwth_darkblue);
+  norm_Jet->SetMarkerStyle(21);
+  pure_1prong->SetMarkerColor(col_rwth_green);
+  pure_1prong->SetMarkerStyle(22);
+  norm_1prong->SetMarkerColor(col_rwth_green);
+  norm_1prong->SetMarkerStyle(22);
+
+  TCanvas* canvasTrigRatesPure = new TCanvas("canvasTrigRatesPure", "canvasTrigRatesPure", 1200, 600);
+  canvasTrigRatesPure->SetLeftMargin(0.08);
+  canvasTrigRatesPure->SetGrid(0,1);
+  canvasTrigRatesPure->cd();
+  pure_Parked->Draw("AP");
+
+  double maxY(70.);
+  std::vector<double> runBorder;
+  runBorder.push_back(190456);
+  runBorder.push_back(193833);
+  runBorder.push_back(198022);
+  runBorder.push_back(199653);
+  runBorder.push_back(203777);
+  runBorder.push_back(206742);
+  runBorder.push_back(208940);
+  std::vector<TLine*> lines;
+  for (int i = 0; i < runBorder.size(); i++){
+	  TLine* l = new TLine(runBorder.at(i), 0, runBorder.at(i), maxY);
+	  l->SetLineColor(kGray+1);
+	  l->SetLineStyle(9);
+	  l->SetLineWidth(2);
+	  lines.push_back(l);
+  }
+  TText* t = new TText();
+  t->SetTextAlign(22);
+  t->SetTextColor(kGray+1);
+  t->SetTextSize(0.04);
+
+  pure_Parked->GetXaxis()->SetNoExponent(kTRUE);
+  pure_Parked->GetXaxis()->SetTitle("CMS Run number");
+  pure_Parked->GetYaxis()->SetTitle("Rate / Hz");
+  pure_Parked->GetYaxis()->SetTitleOffset(0.65);
+  pure_Parked->GetXaxis()->SetLimits(188000, 211000); // SetRangeUser does not work here
+  pure_Parked->GetYaxis()->SetRangeUser(0, maxY);
+  pure_Parked->Draw("AP");
+  canvasTrigRatesPure->Update();
+  for (int i = 0; i < lines.size(); i++){lines.at(i)->Draw();}
+  t->DrawText(192144, maxY-4., "2012A");
+  t->DrawText(195928, maxY-4., "2012B");
+  t->DrawText(198838, maxY-4., "2012C");
+  t->DrawText(198838, maxY-7.5, "part 1");
+  t->DrawText(201715, maxY-4., "2012C");
+  t->DrawText(201715, maxY-7.5, "part 2");
+  t->DrawText(205260, maxY-4., "2012D");
+  t->DrawText(205260, maxY-7.5, "part 1");
+  t->DrawText(207841, maxY-4., "2012D");
+  t->DrawText(207841, maxY-7.5, "part 2");
+  pure_Parked->Draw("P");
+  pure_Jet->Draw("P");
+  pure_1prong->Draw("P");
+
+  TLegend* legendRates = new TLegend(0.13,0.50,0.28,0.75);
+  legendRates->SetBorderSize(1);
+  legendRates->SetTextSize(0.04);
+  legendRates->SetLineColor(1);
+  legendRates->SetLineStyle(1);
+  legendRates->SetLineWidth(1);
+  legendRates->SetFillColor(0);
+  legendRates->AddEntry(pure_Parked,	"#tau_{h}#tau_{h}","p");
+  legendRates->AddEntry(pure_Jet,		"#tau_{h}#tau_{h} + jet","p");
+  legendRates->AddEntry(pure_1prong,	"#tau_{1#pi}#tau_{1#pi}","p");
+  legendRates->Draw();
+
+  canvasTrigRatesPure->SaveAs(savePath + "/TriggerRatesPure.pdf");
+
+  maxY = 60.;
+
+  TCanvas* canvasTrigRatesNorm = new TCanvas("canvasTrigRatesNorm", "canvasTrigRatesNorm", 1200, 600);
+  canvasTrigRatesNorm->SetLeftMargin(0.08);
+  canvasTrigRatesNorm->SetGrid(0,1);
+  canvasTrigRatesNorm->cd();
+  norm_Parked->Draw("AP");
+  norm_Parked->GetXaxis()->SetNoExponent(kTRUE);
+  norm_Parked->GetXaxis()->SetTitle("CMS Run number");
+  norm_Parked->GetYaxis()->SetTitle("Rate / Hz");
+  norm_Parked->GetYaxis()->SetTitleOffset(0.65);
+  norm_Parked->GetXaxis()->SetLimits(188000, 211000);
+  norm_Parked->GetYaxis()->SetRangeUser(0, maxY);
+  norm_Parked->Draw("AP");
+  canvasTrigRatesNorm->Update();
+  for (int i = 0; i < lines.size(); i++){ lines.at(i)->SetY2(maxY); lines.at(i)->Draw();}
+  t->DrawText(192144, maxY-3.5, "2012A");
+  t->DrawText(195928, maxY-3.5, "2012B");
+  t->DrawText(198838, maxY-3.5, "2012C");
+  t->DrawText(198838, maxY-6.7, "part 1");
+  t->DrawText(201715, maxY-3.5, "2012C");
+  t->DrawText(201715, maxY-6.7, "part 2");
+  t->DrawText(205260, maxY-3.5, "2012D");
+  t->DrawText(205260, maxY-6.7, "part 1");
+  t->DrawText(207841, maxY-3.5, "2012D");
+  t->DrawText(207841, maxY-6.7, "part 2");
+  norm_Parked->Draw("P");
+  norm_Jet->Draw("P");
+  norm_1prong->Draw("P");
+
+  legendRates->Draw();
+
+  canvasTrigRatesNorm->SaveAs(savePath + "/TriggerRatesNormalized.pdf");
+}
+
     cout << " ***************** Plot: L1 eff. over pT ****************** " << endl;
 //    TCanvas* canvasL1 = new TCanvas("canvasL1", "canvasL1");
 //    canvasL1->cd();
