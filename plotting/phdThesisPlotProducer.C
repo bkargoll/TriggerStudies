@@ -99,8 +99,8 @@
   runBorder.push_back(206742);
   runBorder.push_back(208940);
   std::vector<TLine*> lines;
-  for (int i = 0; i < runBorder.size(); i++){
-	  TLine* l = new TLine(runBorder.at(i), 0, runBorder.at(i), maxY);
+  for (int ir = 0; ir < runBorder.size(); ir++){
+	  TLine* l = new TLine(runBorder.at(ir), 0, runBorder.at(ir), maxY);
 	  l->SetLineColor(kGray+1);
 	  l->SetLineStyle(9);
 	  l->SetLineWidth(2);
@@ -119,7 +119,7 @@
   pure_Parked->GetYaxis()->SetRangeUser(0, maxY);
   pure_Parked->Draw("AP");
   canvasTrigRatesPure->Update();
-  for (int i = 0; i < lines.size(); i++){lines.at(i)->Draw();}
+  for (int il = 0; il < lines.size(); il++){lines.at(il)->Draw();}
   t->DrawText(192144, maxY-4., "2012A");
   t->DrawText(195928, maxY-4., "2012B");
   t->DrawText(198838, maxY-4., "2012C");
@@ -163,7 +163,7 @@
   norm_Parked->GetYaxis()->SetRangeUser(0, maxY);
   norm_Parked->Draw("AP");
   canvasTrigRatesNorm->Update();
-  for (int i = 0; i < lines.size(); i++){ lines.at(i)->SetY2(maxY); lines.at(i)->Draw();}
+  for (int il = 0; il < lines.size(); il++){ lines.at(il)->SetY2(maxY); lines.at(il)->Draw();}
   t->DrawText(192144, maxY-3.5, "2012A");
   t->DrawText(195928, maxY-3.5, "2012B");
   t->DrawText(198838, maxY-3.5, "2012C");
@@ -181,7 +181,6 @@
   legendRates->Draw();
 
   canvasTrigRatesNorm->SaveAs(savePath + "/TriggerRatesNormalized.pdf");
-}
 
     cout << " ***************** Plot: L1 eff. over pT ****************** " << endl;
 //    TCanvas* canvasL1 = new TCanvas("canvasL1", "canvasL1");
@@ -307,6 +306,7 @@
 	legendIndPtEff->Draw();
 
 	theL1Eff->GetXaxis()->SetMoreLogLabels();
+	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
 	canvasIndPtEffLog->SaveAs(savePath + "/IndLevelsTauPtEff_logX.pdf");
 
 
@@ -568,6 +568,7 @@
 	legendAccumPtEff->Draw();
 
 	theL1Eff->GetXaxis()->SetMoreLogLabels();
+	latex.DrawLatex(xLatex,yLatex,latexText_2012BCD);
 	canvasAccumPtEffLog->SaveAs(savePath + "/AccumLevelsTauPtEff_logX.pdf");
 
 	cout << " ***************** Plot: L1L2 eff. over eta ****************** " << endl;
@@ -1000,8 +1001,7 @@
 	legend->AddEntry(l1TauRate,"Double Tau, |#eta|<2.17","pel");
 	legend->AddEntry(l1JetRate,"Double Jet, |#eta|<3.0","pel");
 	legend->Draw();
-	const char* latexText = "#sqrt{s}=8 TeV, L= 5 #times 10^{33} cm^{-2}s^{-1}";
-	latex.DrawLatex(xLatex-0.15,yLatex,latexText);
+
 	canvasL1rate->SaveAs(savePath + "/L1TauRate.pdf");
 	cout << "All done. Results can be found here:\n     " << savePath << endl;
 }
